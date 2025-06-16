@@ -1,6 +1,11 @@
 data/
 src/testing/lammps_files/*
 *.lammpstrj
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.mp4
 *.lmpdata
 *.lmpin
 *.log
