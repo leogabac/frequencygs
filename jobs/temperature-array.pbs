@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#PBS -N fqgs-1K
+#PBS -q batch
+#PBS -S /bin/bash
+#PBS -l select=1:ncpus=10:mem=2gb
+#PBS -l walltime=48:00:00
+#PBS -j oe
+
+set -euo pipefail
+repo_root="${FREQUENCYGS_REPO_ROOT:-$HOME/Documents/frequencygs/repo}"
+: "${FREQUENCYGS_CAMPAIGN_ROOT:?Missing campaign directory}"
+cd "$repo_root"
+export MPLBACKEND=Agg
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export NUMEXPR_NUM_THREADS=1 NUMBA_NUM_THREADS=1
+printf 'host=%s PBS_JOBID=%s PBS_ARRAY_INDEX=%s\n' "$(hostname)" "$PBS_JOBID" "${PBS_ARRAY_INDEX:-pilot}"
+exec "$repo_root/.venv/bin/python" -u "$repo_root/src/py/run_pbs_job.py"
